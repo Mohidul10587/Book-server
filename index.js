@@ -32,7 +32,7 @@ async function run() {
             res.send(result);
       
           })
-          app.get('/correction', async (req, res) => {
+          app.get('/corrections', async (req, res) => {
             const correction = await correctionsCollection.find().toArray()
             res.send(correction)
           })
