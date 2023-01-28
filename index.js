@@ -39,7 +39,7 @@ async function run() {
     try {
         await client.connect()
         console.log('connected')
-        
+        const correctionsCollection = client.db('Knowledge').collection('correction')
 
         const verifyAdmin = async (req, res, next) => {
             const requester = req.decoded.email
@@ -52,8 +52,16 @@ async function run() {
             }
         }
 
-
-
+        app.post('/correction', async (req, res) => {
+            const correction = req.body;
+            const result = await correctionsCollection.insertOne(correction);
+            res.send(result);
+      
+          })
+          app.get('/correction', async (req, res) => {
+            const correction = await correctionsCollection.find().toArray()
+            res.send(correction)
+          })
 
     } finally {
 
