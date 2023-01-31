@@ -7,12 +7,12 @@ const cors = require('cors');
 require('dotenv').config()
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5001
 
 app.use(cors())
 app.use(express.json())
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.7o5d5sd.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb://mohid:m0EK5JN4EzQnQwpP@ac-c1hfgxl-shard-00-00.7o5d5sd.mongodb.net:27017,ac-c1hfgxl-shard-00-01.7o5d5sd.mongodb.net:27017,ac-c1hfgxl-shard-00-02.7o5d5sd.mongodb.net:27017/?ssl=true&replicaSet=atlas-446w00-shard-0&authSource=admin&retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
@@ -36,7 +36,6 @@ async function run() {
             const correction = await correctionsCollection.find().toArray()
             res.send(correction)
           })
-
     } finally {
 
     }
