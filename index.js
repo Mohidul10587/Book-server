@@ -36,6 +36,13 @@ async function run() {
             const correction = await correctionsCollection.find().toArray()
             res.send(correction)
           })
+
+          app.delete('/deleteOrder/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await ordersCollection.deleteOne(filter);
+            res.send(result);
+        })
     } finally {
 
     }
