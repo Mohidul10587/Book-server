@@ -36,21 +36,60 @@ async function run() {
       .db("Knowledge")
       .collection("correction");
 
-    app.post("/correction", async (req, res) => {
+    app.post("/post/create", async (req, res) => {
       const correction = req.body;
       const result = await correctionsCollection.insertOne(correction);
       res.send(result);
     });
-    app.get("/corrections", async (req, res) => {
+    app.get("/post/getAllForUsers", async (req, res) => {
       const correction = await correctionsCollection.find().toArray();
       res.send(correction);
     });
 
-    app.delete("/deleteOrder/:id", async (req, res) => {
+    app.delete("/post/deleteByUsers/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
       const result = await correctionsCollection.deleteOne(filter);
       res.send(result);
+    });
+    app.put("/post/update/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const updateData = req.body;
+
+        const filter = { _id: ObjectId(id) };
+        const updateDoc = {
+          $set: updateData,
+        };
+
+        const result = await correctionsCollection.updateOne(filter, updateDoc);
+        if (result.matchedCount === 0) {
+          return res.status(404).send({ message: "Document not found" });
+        }
+
+        res.send({ message: "Document updated successfully", result });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Error updating document", error });
+      }
+    });
+
+    app.get("/post/get/", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const document = await correctionsCollection.findOne({
+          _id: ObjectId(id),
+        });
+
+        if (!document) {
+          return res.status(404).send({ message: "Document not found" });
+        }
+
+        res.send(document);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Error fetching document", error });
+      }
     });
   } finally {
   }
